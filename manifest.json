@@ -2,7 +2,7 @@
   "name": "RPSC 1st Grade Commerce Quiz",
   "short_name": "RPSC Quiz",
   "description": "RPSC 1st Grade Commerce व्याख्याता भर्ती परीक्षा Quiz App",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#0D1B3E",
   "theme_color": "#FF6B00",
