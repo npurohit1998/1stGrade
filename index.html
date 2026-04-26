@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a0a3e">
+<meta name="description" content="RPSC 1st Grade Commerce Quiz App">
+<link rel="manifest" href="manifest.json">
+<title>RPSC Commerce Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --saffron:#FF6B00;--gold:#FFB300;--deep-navy:#0D1B3E;
+  --navy:#1a2a5e;--light-navy:#2a3f7e;--royal:#3355aa;
+  --green:#00C853;--red:#FF1744;--text:#1a0a3e;--muted:#5a5a7a;
+  --card:#fff;--shadow:0 6px 24px rgba(13,27,62,.15);--r:14px;--t:.22s ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans Devanagari',sans-serif;background:linear-gradient(135deg,#0D1B3E,#1a2a5e 50%,#2a1060);min-height:100vh;color:var(--text)}
+
+/* ── HEADER ── */
+.hdr{background:linear-gradient(90deg,#0D1B3E,#1a2a5e);border-bottom:3px solid var(--saffron);position:sticky;top:0;z-index:200;box-shadow:0 4px 20px rgba(0,0,0,.4)}
+.hdr-in{max-width:1200px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-ic{width:42px;height:42px;background:linear-gradient(135deg,var(--saffron),var(--gold));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.logo-tx .t1{color:#fff;font-size:1rem;font-weight:700;letter-spacing:.5px}
+.logo-tx .t2{color:var(--gold);font-size:.68rem;font-weight:500}
+.hstats{display:flex;gap:10px}
+.hbadge{background:rgba(255,107,0,.15);border:1px solid rgba(255,107,0,.3);border-radius:8px;padding:4px 10px;text-align:center}
+.hbadge span{display:block;color:#fff;font-size:.9rem;font-weight:700}
+.hbadge small{color:var(--gold);font-size:.68rem;font-weight:600}
+
+/* ── LAYOUT ── */
+.app{max-width:1200px;margin:0 auto;padding:14px 14px}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:4px;background:rgba(255,255,255,.08);border-radius:13px;padding:4px;margin-bottom:16px;overflow-x:auto}
+.tbtn{flex:1;min-width:76px;padding:9px 10px;border:none;border-radius:10px;background:transparent;color:rgba(255,255,255,.6);font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:var(--t);white-space:nowrap}
+.tbtn.on{background:linear-gradient(135deg,var(--saffron),#E55000);color:#fff;box-shadow:0 4px 14px rgba(255,107,0,.4)}
+.tbtn:hover:not(.on){background:rgba(255,255,255,.12);color:#fff}
+
+/* ── PANELS ── */
+.panel{display:none}
+.panel.on{display:block;animation:fs .28s ease}
+@keyframes fs{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);padding:18px;margin-bottom:13px}
+.ctitle{font-size:.95rem;font-weight:700;color:var(--deep-navy);border-left:4px solid var(--saffron);padding-left:9px;margin-bottom:13px}
+
+/* ── DASHBOARD ── */
+.dgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px;margin-bottom:16px}
+.dcard{background:linear-gradient(135deg,var(--navy),var(--light-navy));border-radius:13px;padding:15px;color:#fff;text-align:center;cursor:pointer;transition:var(--t);border:1px solid rgba(255,255,255,.1)}
+.dcard:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.3)}
+.dcard .ic{font-size:1.7rem;margin-bottom:4px}
+.dcard .nm{font-size:1.4rem;font-weight:800;color:var(--gold)}
+.dcard .lb{font-size:.72rem;color:rgba(255,255,255,.72);margin-top:2px}
+
+/* ── SUBJECT GRID ── */
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.scard{border-radius:13px;padding:13px;border:2px solid transparent;cursor:pointer;transition:var(--t)}
+.scard:hover{border-color:var(--saffron);transform:translateY(-2px)}
+.sh{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.sn{font-weight:700;font-size:.88rem}
+.sm{font-size:.73rem;color:var(--muted)}
+.pbar{height:5px;background:rgba(0,0,0,.08);border-radius:3px;margin-top:7px}
+.pfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--saffron),var(--gold));transition:width .6s}
+.p1c{background:linear-gradient(135deg,#e8f4ff,#cce4ff)}
+.p2c{background:linear-gradient(135deg,#fff3e0,#ffe0b2)}
+
+/* ── SECTION TITLE ── */
+.stitle{font-size:1.05rem;font-weight:800;color:#fff;margin-bottom:11px;display:flex;align-items:center;gap:8px}
+.stitle::after{content:'';flex:1;height:2px;background:linear-gradient(90deg,rgba(255,107,0,.5),transparent)}
+
+/* ── TOPIC LIST ── */
+.tlist{display:flex;flex-direction:column;gap:6px}
+.titem{border-radius:10px;background:linear-gradient(90deg,#f8f9ff,#f0f4ff);border-left:4px solid var(--royal);overflow:hidden}
+.trow{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;cursor:pointer;transition:var(--t)}
+.trow:hover{background:linear-gradient(90deg,#e8f0ff,#dce8ff)}
+.tn{font-weight:600;font-size:.86rem}
+.tm{font-size:.71rem;color:var(--muted);margin-top:1px}
+.qchip{display:inline-block;padding:1px 6px;border-radius:4px;font-size:.68rem;font-weight:700;background:rgba(255,107,0,.12);color:var(--saffron);margin-left:5px}
+.badge{padding:3px 8px;border-radius:5px;font-size:.68rem;font-weight:700;white-space:nowrap}
+.bh{background:#ffe0b2;color:#e65100}.bm{background:#e8f5e9;color:#2e7d32}.bl{background:#fce4ec;color:#880e4f}
+
+/* ── UPLOAD PANEL ── */
+.upload-panel{background:#f8f9ff;border:1px dashed #b0bcd8;border-radius:10px;padding:13px;margin:0 12px 10px;display:none}
+.upload-panel.show{display:block}
+.upload-title{font-size:.8rem;font-weight:700;color:var(--deep-navy);margin-bottom:9px;display:flex;align-items:center;gap:6px}
+.upload-tabs{display:flex;gap:5px;margin-bottom:10px}
+.utab{padding:5px 12px;border:1.5px solid #d0d8ef;border-radius:7px;background:#fff;font-family:inherit;font-size:.74rem;font-weight:600;cursor:pointer;color:var(--muted);transition:var(--t)}
+.utab.on{background:var(--royal);color:#fff;border-color:var(--royal)}
+.uarea{display:none}.uarea.show{display:block}
+.json-textarea{width:100%;height:130px;padding:9px;border:1.5px solid #d0d8ef;border-radius:8px;font-family:'Courier New',monospace;font-size:.75rem;color:var(--text);resize:vertical;outline:none;transition:var(--t)}
+.json-textarea:focus{border-color:var(--saffron)}
+.file-drop{border:2px dashed #b0bcd8;border-radius:8px;padding:18px;text-align:center;cursor:pointer;transition:var(--t);background:#fff}
+.file-drop:hover,.file-drop.drag{border-color:var(--saffron);background:#fff8f0}
+.file-drop p{font-size:.8rem;color:var(--muted);margin-top:5px}
+.file-drop input{display:none}
+.upload-actions{display:flex;gap:8px;margin-top:9px;flex-wrap:wrap;align-items:center}
+.upload-status{font-size:.75rem;font-weight:600;padding:4px 10px;border-radius:6px;display:none}
+.us-ok{background:#e8f5e9;color:#2e7d32;display:inline-block}
+.us-err{background:#fce4ec;color:#c62828;display:inline-block}
+.json-example{background:#1e2a4a;border-radius:8px;padding:10px;margin-top:9px;font-family:'Courier New',monospace;font-size:.7rem;color:#a8d8ff;line-height:1.6;overflow-x:auto;white-space:pre}
+.q-count-chip{background:linear-gradient(135deg,var(--saffron),var(--gold));color:#fff;padding:2px 8px;border-radius:6px;font-size:.7rem;font-weight:700}
+
+/* ── QUIZ ── */
+.qhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:13px;flex-wrap:wrap;gap:8px}
+.qmeta{font-size:.8rem;color:var(--muted)}
+.qmeta strong{color:var(--deep-navy);font-size:.9rem}
+.timer{background:var(--deep-navy);color:#fff;padding:5px 12px;border-radius:7px;font-weight:700;font-size:.85rem;font-family:'Rajdhani',monospace;letter-spacing:1px;border:1px solid rgba(255,179,0,.3)}
+.timer.warn{background:#e65100}
+.pstrip{height:7px;background:#e0e4ef;border-radius:4px;margin-bottom:15px;overflow:hidden}
+.pstrip-f{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--saffron),var(--gold));transition:width .5s}
+.qcard{background:#fff;border-radius:13px;padding:19px;box-shadow:0 4px 18px rgba(13,27,62,.11);margin-bottom:13px;border-top:4px solid var(--saffron)}
+.qnum{font-size:.72rem;color:var(--saffron);font-weight:700;margin-bottom:7px}
+.qtext{font-size:.96rem;font-weight:600;color:var(--text);line-height:1.65;margin-bottom:14px}
+.opts{display:flex;flex-direction:column;gap:7px}
+.opt{padding:11px 14px;border:2px solid #e0e4ef;border-radius:9px;background:#fff;text-align:left;cursor:pointer;font-family:inherit;font-size:.87rem;font-weight:500;color:var(--text);transition:var(--t);display:flex;align-items:center;gap:9px}
+.opt:hover:not(:disabled){border-color:var(--royal);background:#f0f4ff}
+.opt.sel{border-color:var(--royal);background:#e8f0ff}
+.opt.ok{border-color:var(--green);background:#e8f5e9;color:#1b5e20}
+.opt.ng{border-color:var(--red);background:#fce4ec;color:#880e4f}
+.opt:disabled{cursor:default}
+.oletter{width:26px;height:26px;border-radius:50%;flex-shrink:0;background:#e8ecf8;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--navy)}
+.opt.ok .oletter{background:var(--green);color:#fff}
+.opt.ng .oletter{background:var(--red);color:#fff}
+.exp{background:linear-gradient(135deg,#f0f8ff,#e4f0ff);border-left:4px solid var(--royal);border-radius:0 9px 9px 0;padding:11px 13px;margin-top:11px;font-size:.84rem;color:var(--text);line-height:1.7;display:none}
+.exp.show{display:block}
+.src-tag{font-size:.7rem;color:var(--saffron);font-weight:600;margin-top:5px}
+.qactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+
+/* ── BUTTONS ── */
+.btn{padding:10px 20px;border:none;border-radius:9px;font-family:inherit;font-size:.84rem;font-weight:700;cursor:pointer;transition:var(--t);display:inline-flex;align-items:center;gap:5px}
+.btn-p{background:linear-gradient(135deg,var(--saffron),#E55000);color:#fff;box-shadow:0 4px 13px rgba(255,107,0,.3)}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(255,107,0,.4)}
+.btn-s{background:#e8ecf8;color:var(--navy)}
+.btn-s:hover{background:#d4dbf0}
+.btn-n{background:var(--navy);color:#fff}
+.btn-g{background:var(--green);color:#fff}
+.btn-r{background:var(--red);color:#fff}
+.btn-sm{padding:6px 13px;font-size:.76rem}
+.btn-xs{padding:4px 9px;font-size:.7rem}
+
+/* ── RESULTS ── */
+.result-box{text-align:center;padding:24px 16px}
+.score-ring{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 0 0 5px #fff,0 0 0 7px var(--gold)}
+.score-in{width:86px;height:86px;border-radius:50%;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.snum{font-size:1.7rem;font-weight:800;color:var(--saffron)}
+.sden{font-size:.75rem;color:var(--muted)}
+.ssum{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:16px 0}
+.ssi{padding:10px;border-radius:9px;text-align:center}
+.ssi-c{background:#e8f5e9}.ssi-w{background:#fce4ec}.ssi-s{background:#f3e5f5}
+.ssi-n{font-size:1.3rem;font-weight:800}
+.ssi-l{font-size:.72rem;color:var(--muted)}
+
+/* ── MOCK CONFIG ── */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:11px;margin-bottom:16px}
+.ci label{display:block;font-size:.78rem;font-weight:600;color:var(--muted);margin-bottom:4px}
+.ci select,.ci input{width:100%;padding:8px 11px;border:1.5px solid #d8ddf0;border-radius:7px;font-family:inherit;font-size:.86rem;color:var(--text);outline:none;transition:var(--t)}
+.ci select:focus,.ci input:focus{border-color:var(--saffron)}
+
+/* ── PROGRESS ── */
+.ptbl{width:100%;border-collapse:collapse;font-size:.82rem}
+.ptbl th{background:var(--navy);color:#fff;padding:9px 11px;text-align:left}
+.ptbl td{padding:8px 11px;border-bottom:1px solid #e8ecf8}
+.ptbl tr:hover td{background:#f8f9ff}
+.mbar{height:5px;background:#e0e4ef;border-radius:3px;min-width:55px}
+.mbarf{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--saffron),var(--gold))}
+
+/* ── NOTICE ── */
+.notice{background:rgba(255,179,0,.12);border:1px solid rgba(255,179,0,.28);border-radius:11px;padding:11px 14px;margin-bottom:14px;font-size:.8rem;color:var(--cream);line-height:1.6}
+.notice strong{color:var(--gold)}
+
+/* ── BREADCRUMB ── */
+.bc{display:none;align-items:center;gap:7px;margin-bottom:12px}
+.bc.show{display:flex}
+.bck{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);color:#fff;padding:5px 12px;border-radius:7px;cursor:pointer;font-family:inherit;font-size:.78rem;transition:var(--t)}
+.bck:hover{background:rgba(255,255,255,.2)}
+.bc span{font-size:.78rem;color:rgba(255,255,255,.55)}
+.bc strong{font-size:.8rem;color:#fff}
+
+/* ── MANAGE PAGE ── */
+.manage-search{width:100%;padding:10px 14px;border:1.5px solid #d8ddf0;border-radius:9px;font-family:inherit;font-size:.88rem;margin-bottom:13px;outline:none}
+.manage-search:focus{border-color:var(--saffron)}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.mcard{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 3px 12px rgba(13,27,62,.1);border:1.5px solid #e8ecf8;transition:var(--t)}
+.mcard:hover{border-color:var(--saffron)}
+.mcard-h{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.mcard-n{font-weight:700;font-size:.86rem;color:var(--deep-navy)}
+.mcard-s{font-size:.72rem;color:var(--muted);margin-top:2px}
+.mcard-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+
+@media(max-width:600px){
+  .hstats{display:none}
+  .app{padding:10px 9px}
+  .dgrid{grid-template-columns:repeat(2,1fr)}
+  .tabs{gap:3px}
+  .tbtn{font-size:.72rem;padding:8px 8px}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-in">
+    <div class="logo">
+      <div class="logo-ic">🎓</div>
+      <div class="logo-tx">
+        <div class="t1">RPSC 1st Grade Commerce</div>
+        <div class="t2">Offline Quiz & Mock Test Platform</div>
+      </div>
+    </div>
+    <div class="hstats">
+      <div class="hbadge"><span id="hQ">0</span><small>प्रश्न लोड</small></div>
+      <div class="hbadge"><span id="hA">0</span><small>हल किए</small></div>
+      <div class="hbadge"><span id="hS">—</span><small>सटीकता</small></div>
+    </div>
+  </div>
+</div>
+
+<div class="app">
+  <!-- BREADCRUMB -->
+  <div class="bc" id="bc">
+    <button class="bck" onclick="goBack()">← वापस</button>
+    <span>▶</span>
+    <strong id="bcText"></strong>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="mainTabs">
+    <button class="tbtn on" onclick="goTab('home')">🏠 होम</button>
+    <button class="tbtn" onclick="goTab('p1')">📄 प्रश्न पत्र-I</button>
+    <button class="tbtn" onclick="goTab('p2')">💹 वाणिज्य</button>
+    <button class="tbtn" onclick="goTab('mock')">📝 Mock Test</button>
+    <button class="tbtn" onclick="goTab('prog')">📈 प्रगति</button>
+    <button class="tbtn" onclick="goTab('manage')">⚙️ प्रश्न प्रबंधन</button>
+  </div>
+
+  <!-- HOME -->
+  <div class="panel on" id="panel-home">
+    <div class="notice">
+      <strong>📌 उपयोग विधि:</strong> किसी भी माइक्रो टॉपिक पर क्लिक करें → <strong>JSON अपलोड</strong> करें → क्विज खेलें। प्रश्न LocalStorage में सेव होते हैं।
+    </div>
+    <div class="dgrid">
+      <div class="dcard" onclick="goTab('p1')"><div class="ic">📄</div><div class="nm" id="hP1Q">0</div><div class="lb">Paper-I प्रश्न</div></div>
+      <div class="dcard" onclick="goTab('p2')"><div class="ic">💹</div><div class="nm" id="hP2Q">0</div><div class="lb">Commerce प्रश्न</div></div>
+      <div class="dcard" onclick="goTab('mock')"><div class="ic">🏆</div><div class="nm" id="hMock">0</div><div class="lb">Mock Tests दिए</div></div>
+      <div class="dcard" onclick="goTab('prog')"><div class="ic">📊</div><div class="nm" id="hAcc">—</div><div class="lb">सटीकता</div></div>
+    </div>
+    <div class="stitle">📄 प्रथम प्रश्न पत्र</div>
+    <div class="sgrid" id="homeP1"></div>
+    <div class="stitle" style="margin-top:16px">💹 वाणिज्य</div>
+    <div class="sgrid" id="homeP2"></div>
+  </div>
+
+  <!-- PAPER 1 -->
+  <div class="panel" id="panel-p1">
+    <div class="stitle">📄 प्रथम प्रश्न पत्र — माइक्रो टॉपिक्स</div>
+    <div id="p1Content"></div>
+  </div>
+
+  <!-- PAPER 2 -->
+  <div class="panel" id="panel-p2">
+    <div class="stitle">💹 वाणिज्य — माइक्रो टॉपिक्स</div>
+    <div id="p2Content"></div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="panel" id="panel-quiz">
+    <div id="quizWrap"></div>
+  </div>
+
+  <!-- MOCK TEST -->
+  <div class="panel" id="panel-mock">
+    <div class="card">
+      <div class="ctitle">🏆 Mock Test सेटअप</div>
+      <div class="cgrid">
+        <div class="ci"><label>प्रश्न पत्र</label>
+          <select id="mkPaper">
+            <option value="both">दोनों (Full Mock)</option>
+            <option value="p1">केवल Paper-I</option>
+            <option value="p2">केवल वाणिज्य</option>
+          </select></div>
+        <div class="ci"><label>प्रश्नों की संख्या</label>
+          <select id="mkQN">
+            <option value="20">20 (Quick)</option>
+            <option value="30">30</option>
+            <option value="75">75 (Half)</option>
+            <option value="150" selected>150 (Full)</option>
+          </select></div>
+        <div class="ci"><label>समय सीमा</label>
+          <select id="mkTime">
+            <option value="0">बिना समय सीमा</option>
+            <option value="90" selected>90 मिनट</option>
+            <option value="120">120 मिनट</option>
+            <option value="180">180 मिनट</option>
+          </select></div>
+        <div class="ci"><label>नकारात्मक अंकन</label>
+          <select id="mkNeg">
+            <option value="0.33" selected>हाँ (−⅓)</option>
+            <option value="0.25">हाँ (−¼)</option>
+            <option value="0">नहीं</option>
+          </select></div>
+        <div class="ci"><label>कठिनाई</label>
+          <select id="mkDiff">
+            <option value="all">सभी स्तर</option>
+            <option value="easy">आसान</option>
+            <option value="medium">मध्यम</option>
+            <option value="hard">कठिन</option>
+          </select></div>
+      </div>
+      <div style="display:flex;gap:9px;flex-wrap:wrap">
+        <button class="btn btn-p" onclick="startMock()">🚀 Mock Test शुरू करें</button>
+        <button class="btn btn-s" onclick="toggleMockHist()">📋 पिछले परिणाम</button>
+      </div>
+    </div>
+    <div class="card" id="mockHistCard" style="display:none">
+      <div class="ctitle">📋 पिछले Mock Test परिणाम</div>
+      <div id="mockHistList"></div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="panel" id="panel-prog">
+    <div class="card">
+      <div class="ctitle">📊 समग्र प्रदर्शन</div>
+      <div class="ssum" style="grid-template-columns:repeat(3,1fr)">
+        <div class="ssi ssi-c"><div class="ssi-n" style="color:var(--green)" id="pgC">0</div><div class="ssi-l">✅ सही</div></div>
+        <div class="ssi ssi-w"><div class="ssi-n" style="color:var(--red)" id="pgW">0</div><div class="ssi-l">❌ गलत</div></div>
+        <div class="ssi ssi-s"><div class="ssi-n" id="pgS">0</div><div class="ssi-l">⏭ छोड़े</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">📑 विषयवार प्रगति</div>
+      <div style="overflow-x:auto">
+        <table class="ptbl"><thead><tr><th>विषय</th><th>प्रश्न</th><th>सटीकता</th><th>प्रगति</th></tr></thead>
+        <tbody id="progTbody"></tbody></table>
+      </div>
+    </div>
+    <div style="margin-top:8px">
+      <button class="btn btn-r btn-sm" onclick="resetAll()">🔄 प्रगति रीसेट करें</button>
+    </div>
+  </div>
+
+  <!-- MANAGE / UPLOAD -->
+  <div class="panel" id="panel-manage">
+    <div class="card">
+      <div class="ctitle">⚙️ प्रश्न प्रबंधन — सभी टॉपिक्स</div>
+      <p style="font-size:.82rem;color:var(--muted);margin-bottom:11px">यहाँ से सभी टॉपिक्स के प्रश्न एक जगह देख सकते हैं, अपलोड कर सकते हैं और डिलीट कर सकते हैं।</p>
+      <input type="text" class="manage-search" placeholder="🔍 टॉपिक खोजें..." oninput="filterManage(this.value)" id="manageSearch">
+      <div class="mgrid" id="manageGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<script>
+// ══════════════════════════════════════════════
+// SYLLABUS DATA
+// ══════════════════════════════════════════════
+const P1 = [
+  { id:'hist', name:'भारतीय इतिहास', icon:'🏛️', topics:[
+    {id:'revolt1857',name:'1857 का स्वतन्त्रता संग्राम',avg:0.27},
+    {id:'nationalism1858',name:'राष्ट्रवाद का विकास (1858-1919)',avg:0.73},
+    {id:'nationalism1919',name:'सामूहिक राष्ट्रवाद (1919-1942)',avg:1.27},
+    {id:'revolutionary',name:'क्रान्तिकारी गतिविधियाँ',avg:0.33},
+    {id:'independence',name:'स्वतंत्रता व विभाजन',avg:0.13},
+    {id:'renaissance',name:'19-20 वीं सदी: सामाजिक-धार्मिक पुनर्जागरण',avg:0.67},
+    {id:'leaders_hist',name:'प्रमुख नेतृत्वकर्ता (सावरकर, भगत सिंह, बोस आदि)',avg:1.0},
+    {id:'gandhi_nehru',name:'गाँधी, नेहरु, पटेल, आज़ाद, आंबेडकर',avg:1.07},
+  ]},
+  { id:'raj_anc', name:'राजस्थान की प्राचीन सभ्यताएँ', icon:'🏺', topics:[
+    {id:'kalibanga',name:'कालीबंगा',avg:0.4},
+    {id:'ahar',name:'आहड़',avg:0.27},
+    {id:'ganeshwar',name:'गणेश्वर',avg:0.13},
+    {id:'bairath',name:'बैराठ',avg:0.13},
+  ]},
+  { id:'raj_med', name:'राजस्थान इतिहास (8-18 सदी)', icon:'🏰', topics:[
+    {id:'gurjar',name:'गुर्जर-प्रतिहार',avg:0.27},
+    {id:'chauhan',name:'अजमेर के चौहान',avg:0.4},
+    {id:'mewar_delhi',name:'मेवाड़, रणथम्भौर व दिल्ली सम्बन्ध',avg:0.6},
+    {id:'ranasanga',name:'राणा सांगा',avg:0.27},
+    {id:'pratap',name:'महाराणा प्रताप',avg:0.27},
+    {id:'rajsingh',name:'मेवाड़ के राजसिंह',avg:0.13},
+  ]},
+  { id:'raj_free', name:'राजस्थान में स्वतंत्रता संग्राम', icon:'✊', topics:[
+    {id:'revolt1857_raj',name:'1857 की क्रांति (राजस्थान)',avg:0.73},
+    {id:'political_raj',name:'राजनैतिक जागरण',avg:0.67},
+    {id:'prajamandal',name:'प्रजामंडल आन्दोलन',avg:0.33},
+    {id:'kisan',name:'किसान व जनजातीय आन्दोलन',avg:0.6},
+    {id:'integration',name:'राजस्थान का एकीकरण',avg:0.6},
+  ]},
+  { id:'raj_cult', name:'राजस्थान: समाज, धर्म व संस्कृति', icon:'🎭', topics:[
+    {id:'lokdevata',name:'लोक देवी व देवता',avg:0.33},
+    {id:'saints',name:'राजस्थान के संत',avg:0.13},
+    {id:'architecture',name:'स्थापत्य (मंदिर, किले, महल)',avg:0.87},
+    {id:'painting',name:'चित्रकला — विभिन्न शैलियाँ',avg:0.33},
+    {id:'dance',name:'लोक नृत्य व संगीत',avg:0.33},
+    {id:'language',name:'भाषा व साहित्य',avg:0.53},
+    {id:'mela',name:'मेले व महोत्सव',avg:0.13},
+    {id:'costume',name:'परिधान व आभूषण',avg:0.07},
+  ]},
+  { id:'mental', name:'मानसिक अभियोग्यता', icon:'🧩', topics:[
+    {id:'analogy',name:'समानता (Analogy)',avg:0.07},
+    {id:'series',name:'श्रेणी पूर्तिकरण',avg:0.47},
+    {id:'coding_dec',name:'कूट वाचन (Coding-Decoding)',avg:0.47},
+    {id:'blood_rel',name:'रक्त सम्बन्ध',avg:0.47},
+    {id:'venn',name:'तार्किक वेन आरेख',avg:0.13},
+  ]},
+  { id:'stat10', name:'सांख्यिकी (माध्यमिक)', icon:'📊', topics:[
+    {id:'datacoll',name:'आंकड़ों का संग्रहण',avg:0.07},
+    {id:'graphical',name:'आंकड़ों का ग्राफीय निरूपण',avg:0.33},
+    {id:'central_tend',name:'केन्द्रीय प्रवृत्ति (माध्य, माध्यक, बहुलक)',avg:1.47},
+  ]},
+  { id:'math10', name:'गणित (माध्यमिक)', icon:'🔢', topics:[
+    {id:'real_numbers',name:'परिमेय व अपरिमेय संख्याएँ',avg:0.47},
+    {id:'polynomial',name:'बहुपद के शून्यक व सम्बन्ध',avg:0.73},
+    {id:'linear_eq',name:'दो चर वाले रैखिक समीकरण',avg:0.27},
+    {id:'mensuration',name:'क्षेत्रमिति',avg:2.6},
+  ]},
+  { id:'hindi', name:'सामान्य हिंदी', icon:'📝', topics:[
+    {id:'sandhi',name:'संधि व संधि विच्छेद',avg:0.73},
+    {id:'upsarg',name:'उपसर्ग व प्रत्यय',avg:0.87},
+    {id:'vilom',name:'अनेकार्थक, विलोम व समश्रुत शब्द',avg:0.73},
+    {id:'shuddhi',name:'शब्द शुद्धि व वाक्य शुद्धि',avg:0.67},
+    {id:'paribhashik',name:'अंग्रेजी के पारिभाषिक शब्द',avg:0.6},
+  ]},
+  { id:'english', name:'General English', icon:'🔤', topics:[
+    {id:'tenses',name:'Tenses / Sequence of Tenses',avg:0.67},
+    {id:'voice',name:'Active & Passive Voice',avg:0.53},
+    {id:'narration',name:'Direct & Indirect Speech',avg:0.47},
+    {id:'preposition',name:'Preposition',avg:0.53},
+    {id:'synonyms',name:'Synonyms & Antonyms',avg:0.53},
+    {id:'articles',name:'Articles & Determiners',avg:0.33},
+    {id:'correction',name:'Correction of Sentences',avg:0.2},
+  ]},
+  { id:'current', name:'समसामयिकी', icon:'📰', topics:[
+    {id:'currentaffairs',name:'Current Affairs (Rajasthan & National)',avg:10.0},
+  ]},
+  { id:'science', name:'सामान्य विज्ञान', icon:'🔬', topics:[
+    {id:'atom_mol',name:'अणु परमाणु',avg:0.6},
+    {id:'chemical_rxn',name:'रासायनिक अभिक्रिया व समीकरण',avg:0.6},
+    {id:'carbon',name:'कार्बन व इसके अपररूप',avg:0.27},
+    {id:'force_motion',name:'बल व गति के नियम',avg:0.73},
+    {id:'work_energy',name:'कार्य व उर्जा',avg:0.6},
+    {id:'electricity',name:'विद्युत',avg:0.13},
+    {id:'genetics',name:'आनुवंशिकता व विकास',avg:0.47},
+    {id:'environment',name:'प्राकृतिक संसाधन व पर्यावरण संरक्षण',avg:0.67},
+    {id:'science_tech',name:'विज्ञान व तकनीक में नवीन विकास',avg:1.0},
+    {id:'daily_science',name:'दैनिक जीवन में विज्ञान',avg:0.47},
+  ]},
+  { id:'polity', name:'भारतीय राजव्यवस्था', icon:'⚖️', topics:[
+    {id:'constitution_feat',name:'भारतीय संविधान की विशेषताएँ',avg:0.4},
+    {id:'president',name:'राष्ट्रपति',avg:0.8},
+    {id:'pm',name:'प्रधानमंत्री',avg:0.2},
+    {id:'cabinet',name:'मंत्री परिषद',avg:0.47},
+    {id:'parliament',name:'संसद',avg:0.8},
+    {id:'sc_court',name:'सर्वोच्च न्यायलय',avg:0.53},
+    {id:'election_comm',name:'चुनाव आयोग',avg:0.27},
+    {id:'panchayat',name:'पंचायती राज',avg:0.2},
+  ]},
+  { id:'raj_geo', name:'राजस्थान का भूगोल', icon:'🌏', topics:[
+    {id:'raj_physical',name:'भौतिक विशेषताएँ',avg:0.93},
+    {id:'raj_climate',name:'जलवायु',avg:0.87},
+    {id:'raj_pop',name:'जनसांख्यिकीय विशेषताएँ',avg:1.33},
+    {id:'raj_mineral',name:'खनिज सम्पदा',avg:1.0},
+    {id:'raj_agri',name:'कृषि',avg:0.6},
+    {id:'raj_industry',name:'उद्योग',avg:0.47},
+    {id:'raj_water',name:'जल निकास व नदियाँ',avg:0.6},
+    {id:'raj_energy',name:'ऊर्जा संसाधन',avg:0.4},
+  ]},
+  { id:'edu_psych', name:'शैक्षिक मनोविज्ञान', icon:'🧠', topics:[
+    {id:'psych_nature',name:'शैक्षिक मनोविज्ञान की प्रकृति व निहितार्थ',avg:0.4},
+    {id:'adolescent',name:'किशोर अधिगमकर्ता का विकास',avg:2.6},
+    {id:'learning_approach',name:'अधिगम के दृष्टिकोण',avg:1.0},
+    {id:'mental_health',name:'मानसिक स्वास्थ्य',avg:0.8},
+    {id:'emotional_intel',name:'भावनात्मक बुद्धिमत्ता',avg:0.6},
+  ]},
+  { id:'edu_mgmt', name:'शैक्षिक प्रबन्धन', icon:'🏫', topics:[
+    {id:'mgmt_concept',name:'अवधारणा, कार्य व सिद्धांत',avg:0.73},
+    {id:'tqm',name:'सम्पूर्ण गुणवत्ता प्रबन्धन (TQM)',avg:0.13},
+    {id:'supervision',name:'शैक्षिक पर्यवेक्षण व निरीक्षण',avg:0.13},
+  ]},
+  { id:'raj_edu', name:'राजस्थान: शैक्षिक परिदृश्य', icon:'📚', topics:[
+    {id:'scert',name:'SCERT',avg:0.73},
+    {id:'diet',name:'DIET',avg:0.47},
+    {id:'rsos',name:'RSOS',avg:0.13},
+    {id:'rstb',name:'RSTB',avg:0.13},
+    {id:'rte_nep',name:'RTE 2009 व NEP 2020',avg:1.87},
+  ]},
+];
+
+const P2 = [
+  { id:'accounting', name:'लेखांकन', icon:'📒', topics:[
+    {id:'acc_concepts',name:'लेखांकन अवधारणाएं व परम्पराएँ',avg:0.5},
+    {id:'journal',name:'लेखांकन प्रक्रिया — जर्नल व सहायक बहियाँ',avg:1.83},
+    {id:'trial_balance',name:'तलपट (Trial Balance)',avg:0.83},
+    {id:'rectification',name:'अशुद्धियों का सुधार',avg:1.0},
+    {id:'capital_revenue',name:'पूँजीगत व आयगत मदें',avg:0.33},
+    {id:'final_accounts',name:'अंतिम खाते तैयार करना',avg:2.33},
+    {id:'partnership',name:'साझेदारी खाते (सामान्य, प्रवेश, सेवानिवृत्ति, विघटन)',avg:2.33},
+    {id:'company_accounts',name:'कम्पनी खाते — शेयर व ऋणपत्र',avg:3.83},
+    {id:'computer_acc',name:'लेखांकन में कंप्यूटर का अनुप्रयोग',avg:1.17},
+    {id:'fin_statement',name:'वित्तीय विवरणों का विश्लेषण',avg:1.67},
+  ]},
+  { id:'audit', name:'अंकेक्षण', icon:'🔍', topics:[
+    {id:'audit_basic',name:'अंकेक्षण — अर्थ, उद्देश्य व कार्यक्रम',avg:3.0},
+  ]},
+  { id:'business', name:'व्यवसाय अध्ययन', icon:'💼', topics:[
+    {id:'biz_concept',name:'व्यवसाय — अवधारणा व वर्गीकरण',avg:3.5},
+    {id:'biz_start',name:'व्यवसाय — शुरू करना, निजी व सार्वजनिक क्षेत्र',avg:1.5},
+    {id:'mgmt_concept2',name:'प्रबन्धन — अवधारणा व प्रकृति',avg:3.17},
+    {id:'mgmt_planning',name:'प्रबंध के कार्य — योजना व संगठन',avg:1.5},
+    {id:'staffing',name:'भर्ती व निर्देशन',avg:1.83},
+    {id:'controlling',name:'नियन्त्रण',avg:1.33},
+    {id:'marketing',name:'विपणन — अर्थ व कार्य',avg:2.83},
+    {id:'marketing_princ',name:'विपणन प्रबंधन के सिद्धांत',avg:3.17},
+    {id:'marketing_mix',name:'विपणन मिश्रण',avg:1.17},
+    {id:'contract_law',name:'भारतीय अनुबंध अधिनियम, 1872 (धारा 1-36, 56)',avg:4.5},
+    {id:'consumer_prot',name:'उपभोक्ता संरक्षण अधिनियम, 2019',avg:3.0},
+    {id:'entrepreneurship',name:'उद्यमिता — अवधारणा व भूमिका',avg:2.17},
+    {id:'hrm',name:'मानव संसाधन प्रबंधन — अर्थ व कार्य',avg:1.83},
+    {id:'economic_env',name:'आर्थिक पर्यावरण',avg:2.0},
+    {id:'capital_market',name:'पूँजी बाजार — NSE, BSE, SEBI',avg:4.0},
+    {id:'biz_research',name:'व्यवसाय शोध — अर्थ व प्रकार',avg:1.0},
+    {id:'conflict_mgmt',name:'संघर्ष प्रबन्धन व तनाव प्रबंधन',avg:1.17},
+  ]},
+  { id:'economics', name:'अर्थशास्त्र', icon:'📈', topics:[
+    {id:'eco_development',name:'आर्थिक विकास — अवधारणा व नव उपागम',avg:2.17},
+    {id:'sustainable',name:'संधारणीय विकास व ग्रामीण विकास',avg:4.67},
+    {id:'eco_issues',name:'आर्थिक विकास — मुख्य मुद्दे व सरकारी नीतियाँ',avg:4.17},
+    {id:'hdi',name:'मानव विकास सूचकांक',avg:1.0},
+    {id:'unemployment',name:'बेरोजगारी — प्रकार, रुझान व नीतियाँ',avg:3.17},
+    {id:'economic_reforms',name:'1991 का संकट व आर्थिक सुधार',avg:1.67},
+    {id:'lpg',name:'उदारीकरण, वैश्वीकरण, निजीकरण',avg:2.0},
+    {id:'indian_economy',name:'भारतीय अर्थव्यवस्था — बुनियादी विशेषताएँ',avg:1.17},
+    {id:'industrialization',name:'औद्योगिकीकरण व Make in India',avg:0.83},
+    {id:'msme_fdi',name:'Startups, MSME व FDI',avg:1.0},
+    {id:'foreign_trade',name:'भारत का विदेशी व्यापार',avg:5.17},
+    {id:'national_income',name:'राष्ट्रीय आय — परिभाषा, अवधारणाएँ, मापन',avg:3.0},
+    {id:'demand_analysis',name:'माँग विश्लेषण व पूर्वानुमान',avg:1.17},
+    {id:'public_finance',name:'लोक वित्त — केन्द्रीय बजट व FRBM',avg:2.17},
+    {id:'banking',name:'भारतीय बैंकिंग व्यवस्था',avg:2.17},
+    {id:'monetary_policy',name:'मौद्रिक व राजकोषीय नीतियाँ',avg:2.17},
+  ]},
+  { id:'statistics_p2', name:'सांख्यिकी', icon:'📉', topics:[
+    {id:'stat_eco',name:'अर्थशास्त्र के लिए सांख्यिकी (केन्द्रीय प्रवृत्ति, सूचकांक)',avg:4.0},
+    {id:'stat_biz',name:'व्यावसायिक सांख्यिकी (Sampling, Probability)',avg:1.5},
+  ]},
+  { id:'finance', name:'वित्तीय प्रबंधन', icon:'💰', topics:[
+    {id:'fin_mgmt',name:'वित्तीय प्रबंधन — अर्थ, उद्देश्य व निर्णयन',avg:1.5},
+    {id:'capital_structure',name:'पूँजी संरचना',avg:0},
+    {id:'ratio_analysis',name:'अनुपात विश्लेषण',avg:1.0},
+    {id:'cash_flow',name:'नकद प्रवाह विवरण',avg:2.17},
+    {id:'mgmt_acc',name:'प्रबंधकीय लेखांकन — पूँजी की लागत व Leverage',avg:0.5},
+    {id:'working_capital',name:'कार्यशील पूँजी प्रबंधन',avg:1.17},
+  ]},
+  { id:'cost_acc', name:'लागत लेखांकन', icon:'🧮', topics:[
+    {id:'cost_basic',name:'लागत लेखांकन — अर्थ व लागत के अवयव',avg:1.83},
+    {id:'marginal_cost',name:'सीमान्त लागत व CVP विश्लेषण',avg:0.83},
+  ]},
+  { id:'pedagogy', name:'शिक्षा शास्त्र (Pedagogy)', icon:'👩‍🏫', topics:[
+    {id:'communication',name:'संचार कौशल व मौखिक/गैर-मौखिक रणनीतियाँ',avg:1.0},
+    {id:'teaching_models',name:'शिक्षण प्रतिमान (Advance Organizer, Inquiry आदि)',avg:1.67},
+    {id:'tlm',name:'शिक्षण अधिगम सामग्री (TLM)',avg:0.5},
+    {id:'cooperative_learn',name:'सहयोगात्मक अधिगम',avg:0.67},
+  ]},
+  { id:'ict', name:'ICT', icon:'💻', topics:[
+    {id:'digital_learning',name:'डिजिटल लर्निंग व ICT अवधारणा',avg:3.0},
+    {id:'elearning',name:'e-Learning व वर्चुअल कक्षा',avg:0.17},
+    {id:'tech_integration',name:'ICT का शिक्षण में एकीकरण',avg:0.67},
+  ]},
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+const QDB = {}; // { topicId: [...questions] }
+let progress = {};
+let mockHistory = [];
+let navStack = [];
+let quizState = {};
+
+// ── Load from localStorage ──
+function loadStorage() {
+  try {
+    const qd = localStorage.getItem('rpsc_qdb');
+    if(qd) Object.assign(QDB, JSON.parse(qd));
+    const pr = localStorage.getItem('rpsc_prog');
+    if(pr) progress = JSON.parse(pr);
+    const mh = localStorage.getItem('rpsc_mocks');
+    if(mh) mockHistory = JSON.parse(mh);
+  } catch(e){ console.error(e); }
+}
+
+function saveQDB() { localStorage.setItem('rpsc_qdb', JSON.stringify(QDB)); }
+function saveProg() { localStorage.setItem('rpsc_prog', JSON.stringify(progress)); }
+function saveMocks(){ localStorage.setItem('rpsc_mocks', JSON.stringify(mockHistory)); }
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+function init() {
+  loadStorage();
+  renderHome();
+  renderP1();
+  renderP2();
+  renderManage();
+  updateStats();
+}
+
+// ── Count helpers ──
+function totalQ(paper) {
+  const subjs = paper==='p1'?P1:P2;
+  return subjs.reduce((a,s)=>a+s.topics.reduce((b,t)=>b+(QDB[t.id]?.length||0),0),0);
+}
+function totalAttempted() {
+  return Object.values(progress).reduce((a,v)=>a+(v.attempted||0),0);
+}
+function totalCorrect() {
+  return Object.values(progress).reduce((a,v)=>a+(v.correct||0),0);
+}
+
+function updateStats() {
+  const p1q = totalQ('p1'), p2q = totalQ('p2');
+  const att = totalAttempted(), cor = totalCorrect();
+  const acc = att ? Math.round(cor/att*100)+'%' : '—';
+  document.getElementById('hQ').textContent = p1q+p2q;
+  document.getElementById('hA').textContent = att;
+  document.getElementById('hS').textContent = acc;
+  document.getElementById('hP1Q').textContent = p1q;
+  document.getElementById('hP2Q').textContent = p2q;
+  document.getElementById('hMock').textContent = mockHistory.length;
+  document.getElementById('hAcc').textContent = acc;
+  document.getElementById('pgC').textContent = cor;
+  document.getElementById('pgW').textContent = att - cor;
+  document.getElementById('pgS').textContent = Object.values(progress).reduce((a,v)=>a+(v.skipped||0),0);
+}
+
+// ══════════════════════════════════════════════
+// HOME
+// ══════════════════════════════════════════════
+function renderHome() {
+  renderSubjectGrid('homeP1', P1, 'p1');
+  renderSubjectGrid('homeP2', P2, 'p2');
+}
+
+function renderSubjectGrid(containerId, subjects, paper) {
+  document.getElementById(containerId).innerHTML = subjects.map(s => {
+    const totalQs = s.topics.reduce((a,t)=>a+(QDB[t.id]?.length||0),0);
+    const totalPoss = s.topics.length;
+    const prog = getSubjProg(s);
+    return `<div class="scard ${paper==='p1'?'p1c':'p2c'}" onclick="showTopics('${paper}','${s.id}')">
+      <div class="sh"><span style="font-size:1.5rem">${s.icon}</span>
+        <div><div class="sn">${s.name}</div>
+        <div class="sm">${s.topics.length} टॉपिक | ${totalQs} प्रश्न लोड</div></div>
+      </div>
+      <div class="pbar"><div class="pfill" style="width:${prog}%"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function getSubjProg(s) {
+  let att=0,total=0;
+  s.topics.forEach(t=>{ total+=Math.max(QDB[t.id]?.length||0,1); att+=(progress[t.id]?.attempted||0); });
+  return Math.min(100,Math.round(att/total*100));
+}
+
+// ══════════════════════════════════════════════
+// PAPER CONTENT
+// ══════════════════════════════════════════════
+function renderP1() {
+  document.getElementById('p1Content').innerHTML = P1.map(s=>renderSubjectBlock(s,'p1')).join('');
+}
+function renderP2() {
+  document.getElementById('p2Content').innerHTML = P2.map(s=>renderSubjectBlock(s,'p2')).join('');
+}
+
+function renderSubjectBlock(s, paper) {
+  return `<div class="card">
+    <div class="ctitle">${s.icon} ${s.name}</div>
+    <div class="tlist">${s.topics.map(t=>renderTopicRow(t,paper)).join('')}</div>
+  </div>`;
+}
+
+function renderTopicRow(t, paper) {
+  const qcount = QDB[t.id]?.length || 0;
+  const prog = progress[t.id];
+  const done = prog?.attempted||0;
+  const bClass = t.avg>=2?'bh':t.avg>=1?'bm':'bl';
+  const bText = t.avg>=2?'🔥 उच्च':t.avg>=1?'⚡ मध्यम':'💡 कम';
+  return `<div class="titem" id="titem_${t.id}">
+    <div class="trow" onclick="toggleUpload('${t.id}','${paper}')">
+      <div>
+        <div class="tn">${t.name}
+          <span class="qchip" id="qc_${t.id}">${qcount} प्रश्न</span>
+        </div>
+        <div class="tm">RPSC औसत: ${t.avg}/पेपर | हल: ${done}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:7px">
+        <span class="badge ${bClass}">${bText}</span>
+        ${qcount>0?`<button class="btn btn-p btn-sm" onclick="event.stopPropagation();startQuiz('${t.id}','${t.name.replace(/'/g,"\\'")}')">▶ क्विज</button>`:''}
+        <span style="color:var(--muted);font-size:.8rem" id="arr_${t.id}">⬇</span>
+      </div>
+    </div>
+    <div class="upload-panel" id="up_${t.id}">
+      ${buildUploadPanel(t)}
+    </div>
+  </div>`;
+}
+
+// ══════════════════════════════════════════════
+// UPLOAD PANEL
+// ══════════════════════════════════════════════
+function buildUploadPanel(t) {
+  const qcount = QDB[t.id]?.length || 0;
+  return `<div class="upload-title">📥 "${t.name}" — प्रश्न अपलोड करें
+    ${qcount>0?`<span class="q-count-chip">${qcount} प्रश्न लोड हैं</span>`:''}
+  </div>
+  <div class="upload-tabs">
+    <button class="utab on" onclick="switchUTab('${t.id}','paste')">📋 JSON पेस्ट करें</button>
+    <button class="utab" onclick="switchUTab('${t.id}','file')">📁 JSON फाइल</button>
+    <button class="utab" onclick="switchUTab('${t.id}','example')">📖 Format देखें</button>
+    ${qcount>0?`<button class="utab" onclick="switchUTab('${t.id}','view')">👁 प्रश्न देखें</button>`:''}
+  </div>
+
+  <!-- PASTE -->
+  <div class="uarea show" id="ua_paste_${t.id}">
+    <textarea class="json-textarea" id="jta_${t.id}" placeholder='[{"q":"प्रश्न","o":["A","B","C","D"],"a":0,"exp":"व्याख्या","src":"RPSC 2022"}]'></textarea>
+    <div class="upload-actions">
+      <button class="btn btn-p btn-sm" onclick="uploadJSON('${t.id}','paste')">✅ सेव करें</button>
+      <button class="btn btn-s btn-sm" onclick="clearJSON('${t.id}')">🗑 क्लियर करें</button>
+      <span class="upload-status" id="us_${t.id}"></span>
+    </div>
+  </div>
+
+  <!-- FILE -->
+  <div class="uarea" id="ua_file_${t.id}">
+    <div class="file-drop" id="fd_${t.id}" 
+      onclick="document.getElementById('fi_${t.id}').click()"
+      ondragover="event.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleDrop(event,'${t.id}')">
+      <div style="font-size:2rem">📁</div>
+      <strong style="font-size:.85rem">JSON फाइल यहाँ खींचें या क्लिक करें</strong>
+      <p>केवल .json फाइल</p>
+      <input type="file" id="fi_${t.id}" accept=".json" onchange="handleFileInput(this,'${t.id}')">
+    </div>
+  </div>
+
+  <!-- EXAMPLE -->
+  <div class="uarea" id="ua_example_${t.id}">
+    <div class="json-example">[
+  {
+    "q": "यहाँ प्रश्न लिखें",
+    "o": ["विकल्प A", "विकल्प B", "विकल्प C", "विकल्प D"],
+    "a": 1,
+    "exp": "व्याख्या यहाँ लिखें (वैकल्पिक)",
+    "src": "RPSC 2022 / UGC NET (वैकल्पिक)",
+    "diff": "medium"
+  },
+  {
+    "q": "दूसरा प्रश्न",
+    "o": ["A", "B", "C", "D"],
+    "a": 0,
+    "exp": "सही उत्तर A है क्योंकि..."
+  }
+]</div>
+    <div style="margin-top:9px;font-size:.78rem;color:var(--muted);line-height:1.7">
+      <strong style="color:var(--text)">Fields:</strong><br>
+      • <code>q</code> — प्रश्न (आवश्यक)<br>
+      • <code>o</code> — 4 विकल्पों की array (आवश्यक)<br>
+      • <code>a</code> — सही उत्तर का index: 0=A, 1=B, 2=C, 3=D (आवश्यक)<br>
+      • <code>exp</code> — व्याख्या (वैकल्पिक)<br>
+      • <code>src</code> — स्रोत जैसे "RPSC 2022" (वैकल्पिक)<br>
+      • <code>diff</code> — "easy" / "medium" / "hard" (वैकल्पिक)
+    </div>
+  </div>
+
+  <!-- VIEW -->
+  <div class="uarea" id="ua_view_${t.id}">
+    <div id="vw_${t.id}" style="max-height:250px;overflow-y:auto"></div>
+    <div style="margin-top:9px;display:flex;gap:7px">
+      <button class="btn btn-s btn-sm" onclick="exportJSON('${t.id}','${t.name.replace(/'/g,"\\'")}')">⬇ Export JSON</button>
+      <button class="btn btn-r btn-sm" onclick="deleteAllQ('${t.id}','${t.name.replace(/'/g,"\\'")}')">🗑 सभी हटाएं</button>
+    </div>
+  </div>`;
+}
+
+// ── Upload Panel Logic ──
+function toggleUpload(tid, paper) {
+  const panel = document.getElementById('up_'+tid);
+  const arr = document.getElementById('arr_'+tid);
+  const isOpen = panel.classList.contains('show');
+  // Close all others
+  document.querySelectorAll('.upload-panel.show').forEach(el => {
+    el.classList.remove('show');
+    const a = document.getElementById('arr_'+el.id.replace('up_',''));
+    if(a) a.textContent='⬇';
+  });
+  if(!isOpen) {
+    panel.classList.add('show');
+    arr.textContent='⬆';
+  }
+}
+
+function switchUTab(tid, tab) {
+  const tabs = ['paste','file','example','view'];
+  tabs.forEach(t => {
+    document.getElementById(`ua_${t}_${tid}`)?.classList.toggle('show', t===tab);
+  });
+  document.querySelectorAll(`#up_${tid} .utab`).forEach((btn,i)=>{
+    btn.classList.toggle('on', ['paste','file','example','view'][i]===tab);
+  });
+  if(tab==='view') renderViewPanel(tid);
+}
+
+function renderViewPanel(tid) {
+  const qs = QDB[tid]||[];
+  const el = document.getElementById('vw_'+tid);
+  if(!qs.length){ el.innerHTML='<p style="color:var(--muted);font-size:.82rem">कोई प्रश्न नहीं है।</p>'; return; }
+  el.innerHTML = qs.map((q,i)=>`
+    <div style="padding:9px 0;border-bottom:1px solid #e8ecf8;font-size:.8rem">
+      <strong>${i+1}. ${q.q}</strong><br>
+      ${q.o.map((o,j)=>`<span style="color:${j===q.a?'var(--green)':'var(--muted)'}">${'ABCD'[j]}) ${o}${j===q.a?' ✓':''} </span>`).join('')}
+      ${q.src?`<br><span style="color:var(--saffron)">${q.src}</span>`:''}
+    </div>`).join('');
+}
+
+function uploadJSON(tid, mode) {
+  let raw = '';
+  if(mode==='paste') raw = document.getElementById('jta_'+tid)?.value?.trim();
+  showStatus(tid,'','');
+  if(!raw){ showStatus(tid,'JSON खाली है!','err'); return; }
+  try {
+    const arr = JSON.parse(raw);
+    if(!Array.isArray(arr)) throw new Error('Array चाहिए');
+    const valid = arr.filter(q=>q.q&&Array.isArray(q.o)&&q.o.length===4&&q.a!==undefined);
+    if(!valid.length) throw new Error('Valid प्रश्न नहीं मिले');
+    // Append or replace?
+    if(!QDB[tid]) QDB[tid]=[];
+    QDB[tid].push(...valid);
+    saveQDB();
+    updateTopicUI(tid);
+    updateStats();
+    showStatus(tid, `✅ ${valid.length} प्रश्न सेव हुए! कुल: ${QDB[tid].length}`,'ok');
+    document.getElementById('jta_'+tid).value='';
+    // Refresh manage
+    renderManage();
+  } catch(e) {
+    showStatus(tid,'❌ Error: '+e.message,'err');
+  }
+}
+
+function handleFileInput(input, tid) {
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const arr = JSON.parse(e.target.result);
+      if(!Array.isArray(arr)) throw new Error('Array चाहिए');
+      const valid = arr.filter(q=>q.q&&Array.isArray(q.o)&&q.o.length===4&&q.a!==undefined);
+      if(!QDB[tid]) QDB[tid]=[];
+      QDB[tid].push(...valid);
+      saveQDB();
+      updateTopicUI(tid);
+      updateStats();
+      showStatus(tid,`✅ ${valid.length} प्रश्न फाइल से लोड हुए!`,'ok');
+      renderManage();
+    } catch(e){ showStatus(tid,'❌ '+e.message,'err'); }
+  };
+  reader.readAsText(file);
+}
+
+function handleDrop(event, tid) {
+  event.preventDefault();
+  document.getElementById('fd_'+tid)?.classList.remove('drag');
+  const file = event.dataTransfer.files[0];
+  if(file) {
+    const inp = document.getElementById('fi_'+tid);
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    inp.files = dt.files;
+    handleFileInput(inp, tid);
+  }
+}
+
+function clearJSON(tid) {
+  if(!confirm('इस टॉपिक के सभी प्रश्न हटाएं?')) return;
+  delete QDB[tid];
+  saveQDB();
+  updateTopicUI(tid);
+  updateStats();
+  showStatus(tid,'🗑 सभी प्रश्न हटा दिए गए।','ok');
+  renderManage();
+}
+
+function deleteAllQ(tid, name) {
+  if(!confirm(`"${name}" के सभी प्रश्न हटाएं?`)) return;
+  delete QDB[tid];
+  saveQDB();
+  updateTopicUI(tid);
+  updateStats();
+  renderManage();
+}
+
+function exportJSON(tid, name) {
+  const data = QDB[tid]||[];
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${tid}.json`;
+  a.click();
+}
+
+function showStatus(tid, msg, type) {
+  const el = document.getElementById('us_'+tid);
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'upload-status ' + (type==='ok'?'us-ok':type==='err'?'us-err':'');
+  el.style.display = msg ? 'inline-block' : 'none';
+}
+
+function updateTopicUI(tid) {
+  const count = QDB[tid]?.length||0;
+  // Update chip
+  const chip = document.getElementById('qc_'+tid);
+  if(chip) chip.textContent = count+' प्रश्न';
+  // Re-render the row to show/hide quiz button
+  // Find topic in both papers
+  let found = null;
+  let paper = null;
+  for(const s of P1){ const t=s.topics.find(t=>t.id===tid); if(t){found=t;paper='p1';break;} }
+  if(!found) for(const s of P2){ const t=s.topics.find(t=>t.id===tid); if(t){found=t;paper='p2';break;} }
+  if(!found) return;
+  const item = document.getElementById('titem_'+tid);
+  if(item){ item.outerHTML = renderTopicRow(found, paper); }
+  // Re-attach upload panel if was open
+  const newPanel = document.getElementById('up_'+tid);
+  if(newPanel) { newPanel.innerHTML = buildUploadPanel(found); newPanel.classList.add('show'); }
+}
+
+// ══════════════════════════════════════════════
+// QUIZ ENGINE
+// ══════════════════════════════════════════════
+function startQuiz(tid, tname) {
+  const qs = QDB[tid];
+  if(!qs || !qs.length){ alert('इस टॉपिक में प्रश्न नहीं हैं। पहले JSON अपलोड करें।'); return; }
+  const shuffled = shuffle([...qs]).slice(0,Math.min(30,qs.length));
+  launchQuiz(shuffled, tid, tname, 0, 0.33);
+}
+
+function launchQuiz(questions, tid, tname, timeSecs, negative) {
+  navStack.push(document.querySelector('.tbtn.on')?.getAttribute('onclick')?.match(/'(\w+)'/)?.[1]||'home');
+  quizState = { questions, tid, tname, current:0, answers:new Array(questions.length).fill(null), startTime:Date.now(), timeSecs, negative, timerInt:null };
+  document.getElementById('mainTabs').style.display='none';
+  document.getElementById('bc').style.display='none';
+  goTab('quiz');
+  if(timeSecs>0) startTimer();
+  renderQ();
+}
+
+function startTimer() {
+  quizState.timerInt = setInterval(()=>{
+    const elapsed = Math.floor((Date.now()-quizState.startTime)/1000);
+    const rem = quizState.timeSecs - elapsed;
+    const el = document.getElementById('timerEl');
+    if(!el){ clearInterval(quizState.timerInt); return; }
+    if(rem<=0){ clearInterval(quizState.timerInt); showResults(); return; }
+    const m=Math.floor(rem/60), s=rem%60;
+    el.textContent = `⏱ ${m}:${String(s).padStart(2,'0')}`;
+    el.className = 'timer'+(rem<=120?' warn':'');
+  },1000);
+}
+
+function renderQ() {
+  const { questions, current, answers, timeSecs, tname } = quizState;
+  const q = questions[current];
+  const pct = Math.round(current/questions.length*100);
+  document.getElementById('quizWrap').innerHTML = `
+    <div class="qhdr">
+      <div class="qmeta"><strong>${tname}</strong><br>प्रश्न ${current+1}/${questions.length}
+        ${q.src?`<span class="qchip">📌 ${q.src}</span>`:''}
+      </div>
+      <div style="display:flex;gap:7px;align-items:center">
+        ${timeSecs>0?`<div class="timer" id="timerEl">⏱ --:--</div>`:''}
+        <button class="btn btn-s btn-sm" onclick="confirmExit()">✖ छोड़ें</button>
+      </div>
+    </div>
+    <div class="pstrip"><div class="pstrip-f" style="width:${pct}%"></div></div>
+    <div class="qcard">
+      <div class="qnum">प्रश्न ${current+1}</div>
+      <div class="qtext">${q.q}</div>
+      <div class="opts">
+        ${q.o.map((opt,i)=>{
+          let cls='';
+          const ans=answers[current];
+          if(ans!==null&&ans!==-1){ if(i===q.a)cls='ok'; else if(i===ans)cls='ng'; }
+          return `<button class="opt ${cls}" onclick="pick(${i})" ${ans!==null?'disabled':''} >
+            <div class="oletter">${'ABCD'[i]}</div>${opt}</button>`;
+        }).join('')}
+      </div>
+      <div class="exp ${answers[current]!==null&&answers[current]!==-1?'show':''}" id="expBox">
+        💡 <strong>व्याख्या:</strong> ${q.exp||'—'}
+        ${q.src?`<div class="src-tag">स्रोत: ${q.src}</div>`:''}
+      </div>
+    </div>
+    <div class="qactions">
+      ${current>0?`<button class="btn btn-s" onclick="prevQ()">◀ पिछला</button>`:''}
+      ${answers[current]===null?`<button class="btn btn-s" onclick="skip()">⏭ छोड़ें</button>`:''}
+      ${answers[current]!==null?(current<questions.length-1?`<button class="btn btn-p" onclick="nextQ()">अगला ▶</button>`:`<button class="btn btn-g" onclick="showResults()">🏆 परिणाम</button>`):''}
+    </div>`;
+  if(timeSecs>0&&quizState.timerInt) startTimer();
+}
+
+function pick(i) {
+  const { questions, current, answers, negative, tid } = quizState;
+  if(answers[current]!==null) return;
+  quizState.answers[current]=i;
+  if(!progress[tid]) progress[tid]={attempted:0,correct:0,skipped:0};
+  progress[tid].attempted++;
+  if(i===questions[current].a) progress[tid].correct++;
+  saveProg(); updateStats();
+  renderQ();
+}
+
+function skip() {
+  const { current, questions, tid } = quizState;
+  quizState.answers[current]=-1;
+  if(!progress[tid]) progress[tid]={attempted:0,correct:0,skipped:0};
+  progress[tid].skipped=(progress[tid].skipped||0)+1;
+  saveProg(); updateStats();
+  if(current<questions.length-1) nextQ(); else showResults();
+}
+
+function nextQ(){ quizState.current++; renderQ(); }
+function prevQ(){ quizState.current--; renderQ(); }
+
+function confirmExit(){ if(confirm('क्विज बीच में छोड़ें?')){ clearInterval(quizState.timerInt); closeQuiz(); } }
+
+function closeQuiz() {
+  document.getElementById('mainTabs').style.display='flex';
+  const prev = navStack.pop()||'home';
+  goTab(prev);
+}
+
+function showResults() {
+  clearInterval(quizState.timerInt);
+  const { questions, answers, tname, startTime, negative } = quizState;
+  let cor=0,wr=0,sk=0;
+  answers.forEach((a,i)=>{ if(a===-1||a===null)sk++; else if(a===questions[i].a)cor++; else wr++; });
+  const rawScore = cor - negative*wr;
+  const score = Math.max(0, rawScore);
+  const maxScore = questions.length;
+  const pct = Math.round(score/maxScore*100);
+  const ring = `conic-gradient(var(--saffron) 0% ${pct}%,#e0e4ef ${pct}% 100%)`;
+
+  mockHistory.unshift({ date:new Date().toLocaleDateString('hi-IN'), topic:tname, score:score.toFixed(1), max:maxScore, cor, wr, sk, pct });
+  saveMocks(); updateStats();
+
+  document.getElementById('quizWrap').innerHTML = `
+    <div class="card">
+      <div class="result-box">
+        <h2 style="margin-bottom:13px;color:var(--deep-navy)">🏆 परीक्षा परिणाम</h2>
+        <div class="score-ring" style="background:${ring}">
+          <div class="score-in">
+            <div class="snum">${score.toFixed(1)}</div>
+            <div class="sden">/${maxScore}</div>
+          </div>
+        </div>
+        <h3 style="color:${pct>=70?'var(--green)':pct>=50?'#f57c00':'var(--red)'};margin-bottom:13px">
+          ${pct>=80?'🌟 उत्कृष्ट!':pct>=60?'✅ अच्छा प्रदर्शन!':'📚 और अभ्यास करें!'}
+        </h3>
+        <div class="ssum">
+          <div class="ssi ssi-c"><div class="ssi-n" style="color:var(--green)">${cor}</div><div class="ssi-l">✅ सही (+${cor})</div></div>
+          <div class="ssi ssi-w"><div class="ssi-n" style="color:var(--red)">${wr}</div><div class="ssi-l">❌ गलत (−${(wr*negative).toFixed(2)})</div></div>
+          <div class="ssi ssi-s"><div class="ssi-n">${sk}</div><div class="ssi-l">⏭ छोड़े</div></div>
+        </div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:14px">
+          विषय: <strong>${tname}</strong> | समय: ${Math.round((Date.now()-startTime)/60000)} मिनट
+          | नकारात्मक: −${negative}/गलत
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <button class="btn btn-p" onclick="retryQuiz()">🔄 फिर से</button>
+          <button class="btn btn-n" onclick="reviewAnswers()">📋 समीक्षा</button>
+          <button class="btn btn-s" onclick="closeQuiz()">🏠 वापस</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function retryQuiz() {
+  const { tid, tname, timeSecs, negative } = quizState;
+  startQuiz(tid, tname);
+}
+
+function reviewAnswers() {
+  const { questions, answers, tname } = quizState;
+  let html = `<div class="card"><div class="ctitle">📋 उत्तर समीक्षा — ${tname}</div>`;
+  questions.forEach((q,i)=>{
+    const ans=answers[i];
+    const ok=ans===q.a; const skip=ans===-1||ans===null;
+    html+=`<div style="margin-bottom:13px;padding:12px;border-radius:9px;background:${ok?'#e8f5e9':skip?'#f5f5f5':'#fce4ec'}">
+      <div style="font-weight:600;margin-bottom:6px">${i+1}. ${q.q}</div>
+      <div style="font-size:.82rem">
+        ${skip?'⏭ छोड़ा गया':ok?`✅ सही: ${q.o[q.a]}`:`❌ आपका: ${q.o[ans]} | ✅ सही: ${q.o[q.a]}`}
+      </div>
+      ${q.exp?`<div style="font-size:.77rem;color:var(--muted);margin-top:4px">💡 ${q.exp}</div>`:''}
+    </div>`;
+  });
+  html+=`<button class="btn btn-s" onclick="showResults()">← वापस</button></div>`;
+  document.getElementById('quizWrap').innerHTML=html;
+}
+
+// ══════════════════════════════════════════════
+// MOCK TEST
+// ══════════════════════════════════════════════
+function startMock() {
+  const paper = document.getElementById('mkPaper').value;
+  const qn = parseInt(document.getElementById('mkQN').value);
+  const timeMins = parseInt(document.getElementById('mkTime').value);
+  const neg = parseFloat(document.getElementById('mkNeg').value);
+  const diff = document.getElementById('mkDiff').value;
+
+  let all=[];
+  const collect=(subjects)=>subjects.forEach(s=>s.topics.forEach(t=>{
+    const qs=(QDB[t.id]||[]).filter(q=>diff==='all'||!q.diff||q.diff===diff);
+    all.push(...qs.map(q=>({...q,_topic:t.name})));
+  }));
+  if(paper==='p1'||paper==='both') collect(P1);
+  if(paper==='p2'||paper==='both') collect(P2);
+
+  if(!all.length){ alert('कोई प्रश्न नहीं मिले। पहले टॉपिक्स में JSON अपलोड करें।'); return; }
+  const shuffled=shuffle(all).slice(0,Math.min(qn,all.length));
+  launchQuiz(shuffled,'mock','Full Mock Test',timeMins*60,neg);
+}
+
+function toggleMockHist() {
+  const card=document.getElementById('mockHistCard');
+  const show=card.style.display==='none';
+  card.style.display=show?'block':'none';
+  if(show){
+    const list=document.getElementById('mockHistList');
+    list.innerHTML=mockHistory.length?mockHistory.map(m=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid #e8ecf8">
+        <div><div style="font-weight:600;font-size:.86rem">${m.topic}</div>
+          <div style="font-size:.73rem;color:var(--muted)">${m.date} | ✅${m.cor} ❌${m.wr} ⏭${m.sk}</div></div>
+        <div style="text-align:center">
+          <div style="font-size:1rem;font-weight:800;color:${m.pct>=60?'var(--green)':'var(--red)'}">${m.score}/${m.max}</div>
+          <div style="font-size:.7rem;color:var(--muted)">${m.pct}%</div>
+        </div>
+      </div>`).join(''):'<p style="color:var(--muted);font-size:.83rem">अभी कोई mock test नहीं दिया।</p>';
+  }
+}
+
+// ══════════════════════════════════════════════
+// PROGRESS TABLE
+// ══════════════════════════════════════════════
+function renderProgress() {
+  const tbody=document.getElementById('progTbody');
+  const allTopics=[];
+  [...P1,...P2].forEach(s=>s.topics.forEach(t=>allTopics.push({...t,subj:s.name})));
+  tbody.innerHTML=allTopics.filter(t=>(progress[t.id]?.attempted||0)>0).map(t=>{
+    const p=progress[t.id]||{};
+    const att=p.attempted||0, cor=p.correct||0;
+    const acc=att?Math.round(cor/att*100):0;
+    const pct=Math.min(100,att/(QDB[t.id]?.length||1)*100);
+    return `<tr>
+      <td><strong>${t.name}</strong><br><small style="color:var(--muted)">${t.subj}</small></td>
+      <td>${att}/${QDB[t.id]?.length||0}</td>
+      <td style="color:${acc>=70?'var(--green)':acc>=50?'#f57c00':'var(--red)'};font-weight:700">${att?acc+'%':'—'}</td>
+      <td><div class="mbar"><div class="mbarf" style="width:${pct}%"></div></div></td>
+    </tr>`;
+  }).join('')||'<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:16px">अभी कोई प्रश्न हल नहीं किया।</td></tr>';
+}
+
+function resetAll() {
+  if(!confirm('सभी प्रगति रीसेट करें?')) return;
+  progress={};
+  saveProg();
+  updateStats();
+  renderProgress();
+}
+
+// ══════════════════════════════════════════════
+// MANAGE PAGE
+// ══════════════════════════════════════════════
+function renderManage(filter='') {
+  const grid=document.getElementById('manageGrid');
+  const allTopics=[];
+  P1.forEach(s=>s.topics.forEach(t=>allTopics.push({...t,subj:s.name,paper:'P-I'})));
+  P2.forEach(s=>s.topics.forEach(t=>allTopics.push({...t,subj:s.name,paper:'P-II'})));
+
+  const filtered = filter ? allTopics.filter(t=>t.name.toLowerCase().includes(filter.toLowerCase())||t.subj.toLowerCase().includes(filter.toLowerCase())) : allTopics;
+
+  grid.innerHTML=filtered.map(t=>{
+    const cnt=QDB[t.id]?.length||0;
+    return `<div class="mcard">
+      <div class="mcard-h">
+        <div>
+          <div class="mcard-n">${t.name}</div>
+          <div class="mcard-s">${t.paper} | ${t.subj}</div>
+        </div>
+        <span style="font-size:.7rem;font-weight:700;padding:3px 8px;border-radius:5px;background:${cnt>0?'#e8f5e9':'#f3f3f3'};color:${cnt>0?'#2e7d32':'var(--muted)'}">${cnt} प्रश्न</span>
+      </div>
+      <div class="mcard-actions">
+        ${cnt>0?`<button class="btn btn-p btn-xs" onclick="startQuiz('${t.id}','${t.name.replace(/'/g,"\\'")}')">▶ क्विज</button>`:''}
+        <button class="btn btn-s btn-xs" onclick="openUploadFor('${t.id}','${t.paper==='P-I'?'p1':'p2'}')">📥 अपलोड</button>
+        ${cnt>0?`<button class="btn btn-xs" style="background:#fff3e0;color:#e65100" onclick="exportJSON('${t.id}','${t.name.replace(/'/g,"\\'")}')">⬇ Export</button>`:''}
+        ${cnt>0?`<button class="btn btn-r btn-xs" onclick="deleteAllQ('${t.id}','${t.name.replace(/'/g,"\\'")}')">🗑</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterManage(val){ renderManage(val); }
+
+function openUploadFor(tid, paper) {
+  goTab(paper);
+  setTimeout(()=>{
+    const el=document.getElementById('up_'+tid);
+    const arr=document.getElementById('arr_'+tid);
+    if(el){ el.classList.add('show'); if(arr)arr.textContent='⬆'; el.scrollIntoView({behavior:'smooth',block:'center'}); }
+  },200);
+}
+
+// ══════════════════════════════════════════════
+// NAV
+// ══════════════════════════════════════════════
+function goTab(tab) {
+  document.querySelectorAll('.tbtn').forEach(b=>{
+    const t=b.getAttribute('onclick')?.match(/'(\w+)'/)?.[1];
+    b.classList.toggle('on',t===tab);
+  });
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('panel-'+tab)?.classList.add('on');
+  if(tab==='prog') renderProgress();
+  if(tab==='manage') renderManage(document.getElementById('manageSearch')?.value||'');
+}
+
+function showTopics(paper, sid) {
+  const subjects=paper==='p1'?P1:P2;
+  const s=subjects.find(s=>s.id===sid);
+  goTab(paper);
+  // Scroll to subject
+  setTimeout(()=>{
+    const cards=document.querySelectorAll(`#panel-${paper} .card`);
+    cards.forEach(c=>{ if(c.querySelector('.ctitle')?.textContent.includes(s?.name?.substring(0,8))) c.scrollIntoView({behavior:'smooth',block:'start'}); });
+  },200);
+}
+
+function goBack() {
+  document.getElementById('mainTabs').style.display='flex';
+  const prev=navStack.pop()||'home';
+  goTab(prev);
+  document.getElementById('bc').style.display='none';
+}
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+function shuffle(arr) {
+  for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  return arr;
+}
+
+init();
+</script>
+</body>
+</html>
